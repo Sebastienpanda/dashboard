@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ["nodejs_24", "corepack"]
+nixPkgs = ["nodejs_22", "corepack"]
 
 [phases.install]
 cmds = [
