@@ -14,7 +14,7 @@ RUN corepack enable && \
 FROM nginx:alpine
 
 # Copie les fichiers du bon sous-dossier (remplace "dashboard" si nécessaire)
-COPY --from=builder /app/dist/dashboard /usr/share/nginx/html
+COPY --from=builder /app/dist/dashboard/browser /usr/share/nginx/html
 
 # Copie ta conf nginx personnalisée
 COPY nginx.conf /etc/nginx/conf.d/default.conf
