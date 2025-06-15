@@ -7,8 +7,8 @@ COPY . .
 
 RUN corepack enable && \
     corepack prepare pnpm@8.15.5 --activate && \
-    pnpm install && \
-    pnpm run build
+    pnpm install -g @angular/cli && \
+    ng build --configuration=production
 
 # Étape 2 : nginx avec les bons fichiers
 FROM nginx:alpine
