@@ -1,27 +1,33 @@
-# Étape 1 : Builder l'app Angular
-FROM node:22.16-alpine AS builder
+# Étape 1 : Construction de l'app Angular
+FROM node:22.16.0-alpine AS build
 
+# Crée un dossier de travail
 WORKDIR /app
 
 # Copie les fichiers nécessaires
-COPY package.json pnpm-lock.yaml ./
-COPY angular.json tsconfig.json ./
-COPY src ./src
+COPY . .
 
-# Installe PNPM et dépendances
-RUN corepack enable && corepack prepare pnpm@8.15.5 --activate && pnpm install
+# Active corepack pour utiliser PNPM
+RUN corepack enable && \
+    corepack prepare pnpm@8.15.5 --activate
 
-# Build Angular (output dans /app/dist)
+# Installation des dépendances
+RUN pnpm install
+
+# Build Angular
 RUN pnpm run build
 
-# Étape 2 : Serveur nginx optimisé pour Angular
+# Étape 2 : Serveur Nginx pour servir l'app
 FROM nginx:alpine
 
-# Copie le build Angular dans le dossier nginx
-COPY --from=builder /app/dist/ /usr/share/nginx/html
+# Copie le build Angular depuis l'étape précédente
+COPY --from=build /app/dist/* /usr/share/nginx/html/
 
-# Remplace config nginx si besoin (SPA / 404 fallback)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copie une config nginx personnalisée si nécessaire
+# COPY nginx.conf /etc/nginx/nginx.conf
 
+# Expose le port 80
 EXPOSE 80
+
+# Lance nginx en mode foreground
 CMD ["nginx", "-g", "daemon off;"]
