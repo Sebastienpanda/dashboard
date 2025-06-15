@@ -1,5 +1,5 @@
-# Étape de build
-FROM node:22.16.0-alpine AS build
+# Étape 1 : build Angular avec PNPM et Node.js 22.16
+FROM node:22.16.0-alpine AS builder
 
 WORKDIR /app
 
@@ -10,13 +10,14 @@ RUN corepack enable && \
     pnpm install && \
     pnpm run build
 
-# Étape finale (fichiers statiques)
-FROM alpine:latest
+# Étape 2 : serveur Nginx avec les fichiers Angular
+FROM nginx:alpine
 
-# Installe un serveur HTTP minimal si Coolify en a besoin
-RUN apk add --no-cache nginx
+# Copie les fichiers compilés Angular
+COPY --from=builder /app/dist /usr/share/nginx/html
 
-COPY --from=build /app/dist /usr/share/nginx/html
+# Copie la configuration nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
