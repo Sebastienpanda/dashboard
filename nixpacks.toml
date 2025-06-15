@@ -1,9 +1,8 @@
-[variables]
-NODE_VERSION = "22.16"
-NIXPACKS_NODE_VERSION = "22.16"
-
 [phases.setup]
-nixPkgs = ["nodejs_22", "corepack"]
+cmds = [
+    "curl -fsSL https://deb.nodesource.com/setup_22.x | bash -",
+    "apt-get install -y nodejs"
+]
 
 [phases.install]
 cmds = [
