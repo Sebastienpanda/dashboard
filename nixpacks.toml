@@ -1,19 +1,19 @@
 [variables]
-NODE_VERSION = "22.12.0"
-NIXPACKS_NODE_VERSION = "22.12.0"
+NODE_VERSION = "20.19.0"
+NIXPACKS_NODE_VERSION = "20.19.0"
 
 [phases.setup]
-nixPkgs = ["nodejs_22", "corepack"]
+nixPkgs = ["nodejs_20", "corepack"]
 
 [phases.install]
 cmds = [
     "corepack enable",
     "corepack prepare pnpm@8.15.5 --activate",
-    "pnpm install"
+    "pnpm install --frozen-lockfile"
 ]
 
 [phases.build]
 cmds = ["pnpm run build"]
 
 [phases.start]
-cmd = "pnpm run start"
+cmd = "echo 'Static site built successfully'"
