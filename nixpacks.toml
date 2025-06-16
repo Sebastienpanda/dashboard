@@ -1,11 +1,9 @@
 [variables]
-NIXPACKS_NODE_VERSION = "22.16"
-
-[phases.setup]
-nixPkgs = ["corepack"]
+NIXPACKS_NODE_VERSION = "22"
 
 [phases.install]
 cmds = [
+    "npm install -g corepack",
     "corepack enable",
     "corepack prepare pnpm@8.15.5 --activate",
     "pnpm install"
